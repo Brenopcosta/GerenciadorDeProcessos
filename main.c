@@ -9,10 +9,10 @@ int i;
 
 void main()
 {
-  Processo processo[2];
-  for(i=0; i<2; i++){
-    processo[i] = incializaProcesso(processo[i]);
 
+  incializaProcesso();
+
+  for(i=0; i<2; i++){
     printf("Dados do processo de PID : %d \n",processo[i].pid);
     printf("Status da execucao do processo :%s\n",processo[i].status);
     printf("Tempo de execucao do processo : %d\n",processo[i].tempoDeExecucao );
