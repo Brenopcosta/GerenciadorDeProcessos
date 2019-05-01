@@ -13,6 +13,6 @@ void incializaProcesso()
   for(i = 0; i < NUMERO_DE_PROCESSOS ;i++){
     processo[i].pid = (rand() % 10) + 1;
     processo[i].tempoDeExecucao = (rand() % 15) + 1;
-    strcpy(processo[i].status, "parado");
+    strcpy(processo[i].status, "Parado");
   }
 }
