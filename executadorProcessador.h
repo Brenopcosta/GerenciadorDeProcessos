@@ -6,9 +6,9 @@
 #define FATIA_DE_TEMPO
 
 
-int executaProcesso(int nProcessos, int tempoDeExecucaoDoGerenciador, int fila[NUMERO_DE_PROCESSOS]) {  
+int executaProcesso(int numeroDeProcessos, int tempoDeExecucaoDoGerenciador, int fila[NUMERO_DE_PROCESSOS]) {  
   int i;
-  for(i = 0; i < nProcessos; i++) {
+  for(i = 0; i < numeroDeProcessos; i++) {
     if (processo[i].pid == fila[0]) {
       break;
     }
