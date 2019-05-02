@@ -6,6 +6,9 @@
 #include "executadorProcessador.h"
 
 void main() {
-  inicializaProcesso();
-  executaProcesso();    
+  int nProcessosRestando = NUMERO_DE_PROCESSOS, nProcessos = NUMERO_DE_PROCESSOS;
+  int tempoDoGerenciador = inicializaProcesso();
+  while (nProcessosRestando > 0) {
+    nProcessosRestando = executaProcesso(nProcessosRestando, tempoDoGerenciador, fila);    
+  }
 }
