@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "inicializadordeprocessos.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "executadorprocessador.h": "c",
+        "string.h": "c"
+    }
+}

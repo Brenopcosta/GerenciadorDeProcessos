@@ -1,5 +1,6 @@
 typedef struct Processos{
   int pid;
-  int tempoDeExecucao;
+  int tempoDeExecucaoTotal;
+  int tempoDeExecucaoAtual;
   char status[10];
 }Processo;
