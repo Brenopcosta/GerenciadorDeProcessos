@@ -19,7 +19,7 @@ void main(){
 
     puts("\n\n fim do primeiro laco \n\n");
 
-    for ( i = 0; i < 5; i++) ;{
+    for ( i = 0; i < 5; i++) {
       removeProcessoDaFila(filaDeProcessosProntos);
       tam = tamanhoFila(filaDeProcessosProntos);
       printf(" tamanho da fila %d \n", tam);
