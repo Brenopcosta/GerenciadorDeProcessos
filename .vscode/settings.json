@@ -4,6 +4,8 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "executadorprocessador.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "finalizadordeprocessos.h": "c",
+        "time.h": "c"
     }
 }

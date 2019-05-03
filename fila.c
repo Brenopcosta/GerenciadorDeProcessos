@@ -1,16 +1,25 @@
+#ifndef ELEMENTO_H
+#define ELEMENTO_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "Processo.h"
 
 typedef struct elemento{
     Processo processo;
     struct elemento *proximoElementoDaFila;
 }Elemento;
 
+#endif
+
+#ifndef FILA_H
+#define FILA_H
 typedef struct fila{
     struct elemento *inicio;
     struct elemento *final;
 }Fila;
+#endif
 
 Fila *filaDeProcessosProntos;
 

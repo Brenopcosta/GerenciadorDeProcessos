@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "fila.c"
 
 #define NUMERO_DE_PROCESSOS 2
-
 Processo processo[NUMERO_DE_PROCESSOS];
-int fila[NUMERO_DE_PROCESSOS];
 
 int inicializaProcesso() {
   srand(time(NULL));
@@ -15,7 +14,7 @@ int inicializaProcesso() {
     processo[i].tempoDeExecucaoTotal = (rand() % 15) + 1;
     processo[i].tempoDeExecucaoAtual = 0;
     processo[i].tempoDeTimeSlice = 0;
-    fila[i] = processo[i].pid;
+    insereElementoNaFila(filaDeProcessosProntos, processo[i]);
     strcpy(processo[i].status, "Pronto");
     printf("\nDados do processo de PID: %d \n",processo[i].pid);
     printf("Status da execucao do processo: %s\n",processo[i].status);
