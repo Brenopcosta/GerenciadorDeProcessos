@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "Processo.h"
+#include "Processo.c"
 #include "executadorProcessador.c"
 
-void main() {
+int main() {
   int numeroDeProcessosRestando = NUMERO_DE_PROCESSOS;
   int numeroDeProcessos = NUMERO_DE_PROCESSOS;
   criaFilaProcessosProntos();
@@ -13,4 +13,5 @@ void main() {
   while (numeroDeProcessosRestando > 0) {
     numeroDeProcessosRestando = executaProcesso(numeroDeProcessosRestando, tempoDoGerenciador);
   }
+  return 0;  
 }

@@ -23,6 +23,7 @@ typedef struct fila{
 
 Fila *filaDeProcessosProntos;
 
+Fila *filaDeAlta
 void criaFilaProcessosProntos(){
     filaDeProcessosProntos = (Fila*) malloc(sizeof(Fila));
     if (filaDeProcessosProntos != NULL) {

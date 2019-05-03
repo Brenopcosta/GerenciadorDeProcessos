@@ -1,4 +1,5 @@
 
+#include "fila.c"
 
 int main(){
     Processo* processo[4];
@@ -32,10 +33,10 @@ int main(){
 
     if(isFilaVazia(filaDeProcessosProntos))
       printf("A fila esta vazia \n");
-    else
+    else{
       tam = tamanhoFila(filaDeProcessosProntos);
       printf("\n\n tamanho da fila %d \n", tam);
-
+    }
     liberaFila(filaDeProcessosProntos);
     return 0;
 }
