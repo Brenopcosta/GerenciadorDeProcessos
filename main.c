@@ -8,7 +8,7 @@
 #include "fila.h"
 
 void main() {
-  int numeroDeProcessosRestando = NUMERO_DE_PROCESSOS,
+  int numeroDeProcessosRestando = NUMERO_DE_PROCESSOS;
   int numeroDeProcessos = NUMERO_DE_PROCESSOS;
   int tempoDoGerenciador = inicializaProcesso();
   while (numeroDeProcessosRestando > 0) {
