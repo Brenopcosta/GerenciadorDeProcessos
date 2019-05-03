@@ -7,7 +7,7 @@
 #include "Processo.h"
 
 typedef struct elemento{
-    Processo processo;
+    Processo* processo;
     struct elemento *proximoElementoDaFila;
 }Elemento;
 
@@ -51,7 +51,7 @@ bool isFilaVazia(Fila* fila){
     return false;
 }
 
-bool insereElementoNaFila(Fila* fila, Processo processo){
+bool insereElementoNaFila(Fila* fila, Processo* processo){
     Elemento *elementoAuxiliar = (Elemento*) malloc(sizeof(Elemento));
     if (elementoAuxiliar == NULL) {
         return false;
@@ -60,31 +60,22 @@ bool insereElementoNaFila(Fila* fila, Processo processo){
     elementoAuxiliar->processo = processo;
     elementoAuxiliar->proximoElementoDaFila = NULL;
 
-    if (fila->final == NULL) {
+    if (fila->inicio == NULL)
       fila->inicio = elementoAuxiliar;
-    }
-    else {
-        fila->final->proximoElementoDaFila = elementoAuxiliar;
-    }
+    else 
+      fila->final->proximoElementoDaFila = elementoAuxiliar;
+    
 
     fila->final = elementoAuxiliar;
     return true;
 }
 
-Processo removeProcessoDaFila(Fila* fila){
-    if (fila == NULL) {
-      Processo processo;
-      return processo;
-    }
-
-    if (fila->inicio == NULL) {
-      Processo processo;
-      return processo;
-    }
+Processo* removeProcessoDaFila(Fila* fila){
+    if (fila == NULL || fila->inicio == NULL)
+      return NULL;
 
     Elemento *elementoAuxiliar = fila->inicio;
-
-    Processo processoRetorno = elementoAuxiliar->processo;
+    Processo* processoRetorno = elementoAuxiliar->processo;
 
     fila->inicio = fila->inicio->proximoElementoDaFila;
     if (fila->inicio == NULL) {
