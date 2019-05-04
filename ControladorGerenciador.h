@@ -63,17 +63,7 @@ void executaProcesso(){
         if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO) {
             printf(" Processo de pid :%d pediu I/O \n",processo[pidDoProcesso]->pid);
 
-            switch (processo[pidDoProcesso]->tipoDeIO) {
-              case 1:
-                processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_IMPRESSORA;
-                break;
-              case 2:
-                processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_DISCO;
-                break;
-              case 3:
-                processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_FITA;
-                break;
-            }
+           
             strcpy(processo[pidDoProcesso]->status, "parado");
             break;
         }
@@ -93,8 +83,20 @@ void executaProcesso(){
 }
 
 void verificarVoltaDeIO(){
-    int i ;
+    int i;
     for(i=0;i<NUMERO_DE_PROCESSOS;i++){
+       switch (processo[i]->tipoDeIO) {
+              case 1:
+                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_IMPRESSORA;
+                break;
+              case 2:
+                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_DISCO;
+                break;
+              case 3:
+                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_FITA;
+                break;
+              
+            }
       if(processo[i]->tempoDeVoltaDeIO >= tempoDoGerenciador){
         switch (processo[i]->tipoDeIO) {
           case IO_IMPRESSORA:
