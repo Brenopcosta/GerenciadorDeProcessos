@@ -2,16 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "Processo.c"
-#include "executadorProcessador.c"
+#include "InicializadorDeProcessos.h"
+#include "ControladorGerenciador.h"
 
 int main() {
-  int numeroDeProcessosRestando = NUMERO_DE_PROCESSOS;
-  int numeroDeProcessos = NUMERO_DE_PROCESSOS;
+
   criaFilaProcessosProntos();
-  int tempoDoGerenciador = inicializaProcesso();
-  while (numeroDeProcessosRestando > 0) {
-    numeroDeProcessosRestando = executaProcesso(numeroDeProcessosRestando, tempoDoGerenciador);
+  criaFilaDeAltaPrioridade();
+  criaFilaDeBaixaPrioridade();
+
+  inicializaProcesso();
+  adicionarProcessosNaFilaDeAltaPrioridade();
+
+  while (isGerenciadorLigado) {
+      verificaTerminoDeGerenciador();
+      verificaFilaDeAltaPrioridade();
+      verificarVoltaDeIO();
+      if (isRodadaOciosa()){
+        tempoDoGerenciador++;
+        continue;
+      }
+      executaProcesso();
   }
-  return 0;  
+
+  liberaMemoriaAlocadaPorProcesso();
+  liberaFila(filaDeAltaPrioridade);
+  liberaFila(filaDeBaixaPrioridade);
+  liberaFila(filaDeProcessosProntos);
+  return 0;
 }

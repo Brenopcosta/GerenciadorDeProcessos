@@ -22,8 +22,9 @@ typedef struct fila{
 #endif
 
 Fila *filaDeProcessosProntos;
+Fila *filaDeAltaPrioridade;
+Fila *filaDeBaixaPrioridade;
 
-Fila *filaDeAlta
 void criaFilaProcessosProntos(){
     filaDeProcessosProntos = (Fila*) malloc(sizeof(Fila));
     if (filaDeProcessosProntos != NULL) {
@@ -31,6 +32,23 @@ void criaFilaProcessosProntos(){
       filaDeProcessosProntos->inicio = NULL;
     }
 }
+
+void criaFilaDeAltaPrioridade(){
+    filaDeAltaPrioridade = (Fila*) malloc(sizeof(Fila));
+      if(filaDeAltaPrioridade != NULL){
+        filaDeAltaPrioridade->inicio = NULL;
+        filaDeAltaPrioridade->final = NULL;
+      }
+};
+
+void criaFilaDeBaixaPrioridade(){
+    filaDeBaixaPrioridade = (Fila*) malloc(sizeof(Fila));
+      if(filaDeBaixaPrioridade != NULL){
+        filaDeBaixaPrioridade->inicio = NULL;
+        filaDeBaixaPrioridade->final = NULL;
+      }
+};
+
 
 void liberaFila(Fila* fila){
     Elemento* elementoAuxiliar;
@@ -63,9 +81,9 @@ bool insereElementoNaFila(Fila* fila, Processo* processo){
 
     if (fila->inicio == NULL)
       fila->inicio = elementoAuxiliar;
-    else 
+    else
       fila->final->proximoElementoDaFila = elementoAuxiliar;
-    
+
 
     fila->final = elementoAuxiliar;
     return true;
