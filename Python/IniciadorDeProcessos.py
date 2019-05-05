@@ -10,5 +10,5 @@ def inicializaProcesso():
         tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
         tempoDeVoltaDeIO = 500
         tipoDeIO = random.randint(1, 3)
-        processos.append(Processo(i, tempoDeExecucaoTotal ,0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
+        processos.append(Processo(i, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
     return
