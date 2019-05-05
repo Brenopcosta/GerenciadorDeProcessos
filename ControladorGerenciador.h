@@ -9,8 +9,11 @@ bool isGerenciadorLigado = true;
 //Verifica se existe processos na fila de alta prioridade, caso sim adiciona estes processos na fila de prontos,
 // caso não Verificase há processos na fila de baixa prioridade e adiciona na fila de prontos
 void verificaFilaDeAltaPrioridade() {
+    int i;
     if(!isFilaVazia(filaDeAltaPrioridade)){
+      for(i=0;i<tamanhoFila(filaDeAltaPrioridade);i++){
         insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeAltaPrioridade)]);
+      }
     }
     else{
       if (!isFilaVazia(filaDeBaixaPrioridade)) {
@@ -51,8 +54,9 @@ bool isRodadaOciosa(){
 void executaProcesso(){
     int pidDoProcesso;
     int i;
-
+    puts("removendo processo da fila ...");
     pidDoProcesso = removeProcessoDaFila(filaDeProcessosProntos);
+    puts("Sucesso na removeProcessoDaFila");
     if(pidDoProcesso == 20)
       printf("processo invalido\n");
 
@@ -79,6 +83,7 @@ void executaProcesso(){
         (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
           if (processo[pidDoProcesso]->tempoDeExecucaoTotal == processo[pidDoProcesso]->tempoDeExecucaoAtual) {
             strcpy(processo[pidDoProcesso]->status, "terminado");
+            puts("sucesso no termino do processo");
           }
           else{
           tempoDoGerenciador++;

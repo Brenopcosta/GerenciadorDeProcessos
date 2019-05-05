@@ -33,6 +33,10 @@ int main(){
       printf(" T: %d \n", tam);
     }
 
+    puts("printado pids dos processos");
+    for(i=0;i<4;i++){
+      printf("processo i tem pid %d\n",processo[i]->pid );
+    }
 
     if(isFilaVazia(filaDeProcessosProntos))
       printf("A fila esta vazia \n");

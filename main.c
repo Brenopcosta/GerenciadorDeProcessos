@@ -21,18 +21,21 @@ int main() {
 
   while (isGerenciadorLigado) {
       verificaTerminoDeGerenciador();
-      puts("Sucesso\n");
+      puts("Sucesso na verificação de termino do gerenciador\n");
       verificaFilaDeAltaPrioridade();
-      puts("Sucesso\n");
+      if (!isFilaVazia(filaDeProcessosProntos)){
+        printf("FILA DE PRONTOS NAO ESTA VAZIA\n");
+      }
+      puts("Sucesso sucesso na verificao da fila de alta prioridade\n");
       verificarVoltaDeIO();
-      puts("Sucesso\n");
+      puts("Sucesso na verificarVoltaDeIO\n");
       if (isRodadaOciosa()){
         tempoDoGerenciador++;
         continue;
       }
-      puts("Sucesso\n");
+      puts("Sucesso no isRodadaOciosa\n");
       executaProcesso();
-      puts("Sucesso\n");
+      puts("Sucesso executaProcesso\n");
   }
 
   liberaMemoriaAlocadaPorProcesso();
