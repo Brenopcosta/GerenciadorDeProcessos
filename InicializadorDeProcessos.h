@@ -10,7 +10,7 @@ void inicializaProcesso() {
   srand(time(NULL));
   int i;
   for(i = 0; i < NUMERO_DE_PROCESSOS ;i++) {
-    processo[i] = (Processo*) malloc(sizeof(Processo));    
+    processo[i] = (Processo*) malloc(sizeof(Processo));
     processo[i]->pid = (rand() % 10) + 1;
     for(int j = 0; j<i; j++) {
       if (processo[i]->pid == processo[j]->pid) {
@@ -21,6 +21,7 @@ void inicializaProcesso() {
     processo[i]->tempoDeExecucaoAtual = 0;
     processo[i]->tempoDePedidaDeIO = (rand() % 15) + 1;
     processo[i]->tipoDeIO = (rand() % 3) + 1;
+    processo[i]->tempoDeVoltaDeIO = 500;
     processo[i]->prioridade = 2;
     strcpy(processo[i]->status, "Pronto");
     printf("\nDados do processo de PID: %d \n",processo[i]->pid);

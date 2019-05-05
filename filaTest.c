@@ -25,8 +25,10 @@ int main(){
 
     printf("Teste de remoção na lista\n");
     for ( i = 0; i < 5; i++) {
-      removeProcessoDaFila(filaDeProcessosProntos);
+
+      Processo *processo = removeProcessoDaFila(filaDeProcessosProntos);
       tam = tamanhoFila(filaDeProcessosProntos);
+      printf("Foi removido processo %d \n", processo->pid );
       printf(" T: %d \n", tam);
     }
 

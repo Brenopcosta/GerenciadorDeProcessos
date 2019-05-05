@@ -42,10 +42,8 @@ void verificaTerminoDeGerenciador() {
 }
 
 bool isRodadaOciosa(){
-    if(isFilaVazia(filaDeProcessosProntos) && isFilaVazia(filaDeBaixaPrioridade) && isFilaVazia(filaDeAltaPrioridade) ){
-      if (!isTodosOsProcessosTerminados()) {
+    if(isFilaVazia(filaDeProcessosProntos) && isFilaVazia(filaDeBaixaPrioridade) && isFilaVazia(filaDeAltaPrioridade) && !isTodosOsProcessosTerminados()){
         return true;
-      }
     }
     else{
       return false;
@@ -55,28 +53,41 @@ bool isRodadaOciosa(){
 void executaProcesso(){
     int pidDoProcesso;
     int i;
-
-    Processo *processoEmExecucao = removeProcessoDaFila(filaDeProcessosProntos);
-    pidDoProcesso = processoEmExecucao->pid;
+    Processo *processoEmExecucao = malloc(sizeof(Processo));
+    processoEmExecucao = removeProcessoDaFila(filaDeProcessosProntos);
+    pidDoProcesso = removeProcessoDaFila(filaDeProcessosProntos)->pid;
 
     for (i = 0; i < TIME_SLICE; i++) {
         if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO) {
             printf(" Processo de pid :%d pediu I/O \n",processo[pidDoProcesso]->pid);
-
-           
             strcpy(processo[pidDoProcesso]->status, "parado");
+               switch (processo[pidDoProcesso]->tipoDeIO) {
+                      case 1:
+                        processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_IMPRESSORA;
+                        break;
+                      case 2:
+                        processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_DISCO;
+                        break;
+                      case 3:
+                        processo[pidDoProcesso]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_FITA;
+                        break;
+                      default:
+                        puts("Erro na pedida de IO");
+                    }
+            free(processoEmExecucao);
             break;
         }
         else{
-        processo[pidDoProcesso]->tempoDeExecucaoAtual++;
+        (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
           if (processo[pidDoProcesso]->tempoDeExecucaoTotal == processo[pidDoProcesso]->tempoDeExecucaoAtual) {
             strcpy(processo[pidDoProcesso]->status, "terminado");
+            free(processoEmExecucao);
           }
           else{
           tempoDoGerenciador++;
           printf("Executando o processo de pid %d\n",processo[pidDoProcesso]->pid);
           printf("Tempo de execucao do gerenciador: %d u.t \n\n",tempoDoGerenciador);
-
+          free(processoEmExecucao);
         }
       }
     }
@@ -84,30 +95,18 @@ void executaProcesso(){
 
 void verificarVoltaDeIO(){
     int i;
-    for(i=0;i<NUMERO_DE_PROCESSOS;i++){
-       switch (processo[i]->tipoDeIO) {
-              case 1:
-                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_IMPRESSORA;
-                break;
-              case 2:
-                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_DISCO;
-                break;
-              case 3:
-                processo[i]->tempoDeVoltaDeIO = tempoDoGerenciador+VOLTA_IO_FITA;
-                break;
-              
-            }
-      if(processo[i]->tempoDeVoltaDeIO >= tempoDoGerenciador){
-        switch (processo[i]->tipoDeIO) {
-          case IO_IMPRESSORA:
-            insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
-            break;
-          case IO_DISCO:
-            insereElementoNaFila(filaDeBaixaPrioridade, processo[i]);
-            break;
-          case IO_FITA_MAGNETICA:
-            insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
-            break;
+      for(i=0;i<NUMERO_DE_PROCESSOS;i++){
+        if(processo[i]->tempoDeVoltaDeIO >= tempoDoGerenciador){
+          switch (processo[i]->tipoDeIO) {
+            case IO_IMPRESSORA:
+              insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
+              break;
+            case IO_DISCO:
+              insereElementoNaFila(filaDeBaixaPrioridade, processo[i]);
+              break;
+            case IO_FITA_MAGNETICA:
+              insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
+              break;
         }
       }
     }
