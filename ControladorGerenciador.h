@@ -9,13 +9,14 @@ bool isGerenciadorLigado = true;
 //Verifica se existe processos na fila de alta prioridade, caso sim adiciona estes processos na fila de prontos,
 // caso não Verificase há processos na fila de baixa prioridade e adiciona na fila de prontos
 void verificaFilaDeAltaPrioridade() {
+    int pidDoProcesso;
     if(!isFilaVazia(filaDeAltaPrioridade)){
-        insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeAltaPrioridade)]);
+        pidDoProcesso = removeProcessoDaFila(filaDeAltaPrioridade);
+        insereElementoNaFila(filaDeProcessosProntos, processo[pidDoProcesso]);
     }
-    else{
-      if (!isFilaVazia(filaDeBaixaPrioridade)) {
-        insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeBaixaPrioridade)]);
-      }
+    if (!isFilaVazia(filaDeBaixaPrioridade)) {
+      pidDoProcesso = removeProcessoDaFila(filaDeBaixaPrioridade);
+      insereElementoNaFila(filaDeProcessosProntos, processo[pidDoProcesso]);
     }
 }
 
@@ -57,7 +58,8 @@ void executaProcesso(){
       printf("processo invalido\n");
 
     for (i = 0; i < TIME_SLICE; i++) {
-        if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO && (strcmp(processo[pidDoProcesso]->status,"parado") != 0) ) {
+        if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO) {
+            printf("Rodada %d ........................................................\n",tempoDoGerenciador );
             printf(" Processo de pid :%d pediu I/O \n",processo[pidDoProcesso]->pid);
             strcpy(processo[pidDoProcesso]->status, "parado");
                switch (processo[pidDoProcesso]->tipoDeIO) {
@@ -77,15 +79,20 @@ void executaProcesso(){
         }
         else{
           if (processo[pidDoProcesso]->tempoDeExecucaoTotal == processo[pidDoProcesso]->tempoDeExecucaoAtual) {
+            printf("Rodada %d ........................................................\n",tempoDoGerenciador );
             strcpy(processo[pidDoProcesso]->status, "terminado");
+            printf("O processo de pid: %d terminou\n",processo[pidDoProcesso]->pid );
+            break;
           }
           else{
           tempoDoGerenciador++;
           (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
+          printf("Rodada %d ........................................................\n",tempoDoGerenciador );
           printf("Executando o processo de pid %d no tempo %d u.t\n",processo[pidDoProcesso]->pid, processo[pidDoProcesso]->tempoDeExecucaoAtual);
           printf("Tempo de execucao do gerenciador: %d u.t \n\n",tempoDoGerenciador);
         }
       }
+
     }
 }
 

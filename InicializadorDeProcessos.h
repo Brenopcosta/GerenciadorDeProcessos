@@ -20,8 +20,9 @@ void inicializaProcesso() {
     strcpy(processo[i]->status, "Pronto");
     printf("\nDados do processo de PID: %d \n",processo[i]->pid);
     printf("Status da execucao do processo: %s\n",processo[i]->status);
-    printd("tempo de pedida de IO %d",processo[i]->tempoDePedidaDeIO);
-    printf("Tempo de execucao do processo: %d\n",processo[i]->tempoDeExecucaoTotal );
+    printf("tempo de pedida de IO %d\n",processo[i]->tempoDePedidaDeIO);
+    printf("Tipo de pedida de IO %d\n",processo[i]->tipoDeIO);
+    printf("Tempo de total de execucao do processo: %d\n",processo[i]->tempoDeExecucaoTotal );
   }
 }
 

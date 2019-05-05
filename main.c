@@ -8,26 +8,36 @@
 int main() {
 
   criaFilaProcessosProntos();
-  puts("Sucesso\n");
   criaFilaDeAltaPrioridade();
-  puts("Sucesso\n");
   criaFilaDeBaixaPrioridade();
-  puts("Sucesso\n");
-
   inicializaProcesso();
-  puts("Sucesso\n");
   adicionarProcessosNaFilaDeAltaPrioridade();
-  puts("Sucesso\n");
+
+  puts("\n\n\n");
+  puts("printando tamanho das filas \n");
+  printf("Tamanho da fila de prontos : %d \n",tamanhoFila(filaDeProcessosProntos) );
+  printf("Tamanho da fila de ALTA Prioridade : %d \n",tamanhoFila(filaDeAltaPrioridade) );
+  printf("Tamanho da fila de BAIXA Prioridade : %d \n",tamanhoFila(filaDeBaixaPrioridade) );
+  puts("\n\n\n");
 
   while (isGerenciadorLigado) {
+    puts("\n\n\n");
+    puts("printando tamanho das filas \n");
+    printf("Tamanho da fila de prontos : %d \n",tamanhoFila(filaDeProcessosProntos) );
+    printf("Tamanho da fila de ALTA Prioridade : %d \n",tamanhoFila(filaDeAltaPrioridade) );
+    printf("Tamanho da fila de BAIXA Prioridade : %d \n",tamanhoFila(filaDeBaixaPrioridade) );
+    puts("\n\n\n");
+
     if(tempoDoGerenciador == processo[0]->tempoDeExecucaoTotal + processo[1]->tempoDeExecucaoTotal) {
       break;
     }
-      printf("Rodada %d ........................................................\n",tempoDoGerenciador );
-      verificaTerminoDeGerenciador();
-      verificaFilaDeAltaPrioridade();
+      if (isTodosOsProcessosTerminados()) {
+        break;
+      }
       verificarVoltaDeIO();
+      verificaFilaDeAltaPrioridade();
       if (isRodadaOciosa()){
+        printf("Rodada %d ........................................................\n",tempoDoGerenciador );
         tempoDoGerenciador++;
         printf("Rodado ociosa\n");
         continue;
