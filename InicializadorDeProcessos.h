@@ -14,10 +14,9 @@ void inicializaProcesso() {
     processo[i]->pid = i;
     processo[i]->tempoDeExecucaoTotal = (rand() % 15) + 1;
     processo[i]->tempoDeExecucaoAtual = 0;
-    processo[i]->tempoDePedidaDeIO = (rand() % 15) + 1;
+    processo[i]->tempoDePedidaDeIO = ((rand() % processo[i]->tempoDeExecucaoTotal)) + 1;
     processo[i]->tipoDeIO = (rand() % 3) + 1;
     processo[i]->tempoDeVoltaDeIO = 500;
-    processo[i]->prioridade = 2;
     strcpy(processo[i]->status, "Pronto");
     printf("\nDados do processo de PID: %d \n",processo[i]->pid);
     printf("Status da execucao do processo: %s\n",processo[i]->status);

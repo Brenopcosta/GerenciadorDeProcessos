@@ -109,7 +109,6 @@ int removeProcessoDaFila(Fila* fila){
     if (fila->inicio == NULL) {
         fila->final = NULL;
     }
-
     free(elementoAuxiliar);
     return pid;
 }

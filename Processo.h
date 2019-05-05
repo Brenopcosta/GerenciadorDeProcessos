@@ -14,7 +14,6 @@ typedef struct Processos{
   int tempoDePedidaDeIO;
   int tempoDeVoltaDeIO;
   int tipoDeIO;
-  int prioridade;
   char status[10];
 }Processo;
 

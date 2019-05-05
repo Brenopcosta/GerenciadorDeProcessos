@@ -31,6 +31,10 @@ int main(){
       tam = tamanhoFila(filaDeProcessosProntos);
       printf("Foi removido processo %d \n", pid );
       printf(" T: %d \n", tam);
+      if (!isFilaVazia(filaDeProcessosProntos)) {
+        printf("AFILA NAO ESTA VAZIAS\n");
+      }
+
     }
 
     puts("printado pids dos processos");

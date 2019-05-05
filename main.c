@@ -8,22 +8,17 @@
 int main() {
 
   criaFilaProcessosProntos();
-  puts("Sucesso\n");
   criaFilaDeAltaPrioridade();
-  puts("Sucesso\n");
   criaFilaDeBaixaPrioridade();
-  puts("Sucesso\n");
 
   inicializaProcesso();
-  puts("Sucesso\n");
   adicionarProcessosNaFilaDeAltaPrioridade();
-  puts("Sucesso\n");
 
   while (isGerenciadorLigado) {
       printf("Rodada %d ........................................................\n",tempoDoGerenciador );
       verificaTerminoDeGerenciador();
       puts("Sucesso na verificação de termino do gerenciador\n");
-      verificaFilaDeAltaPrioridade();
+      adicionaProcessosNaFilaDeProntos();
       if (!isFilaVazia(filaDeProcessosProntos)){
         printf("FILA DE PRONTOS NAO ESTA VAZIA\n");
       }
