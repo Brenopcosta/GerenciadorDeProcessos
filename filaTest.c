@@ -35,7 +35,7 @@ int main(){
 
     puts("printado pids dos processos");
     for(i=0;i<4;i++){
-      printf("processo i tem pid %d\n",processo[i]->pid );
+      printf("processo %d tem pid %d\n",i,processo[i]->pid );
     }
 
     if(isFilaVazia(filaDeProcessosProntos))

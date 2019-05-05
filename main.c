@@ -20,17 +20,19 @@ int main() {
   puts("Sucesso\n");
 
   while (isGerenciadorLigado) {
+      printf("Rodada %d ........................................................\n",tempoDoGerenciador );
       verificaTerminoDeGerenciador();
       puts("Sucesso na verificação de termino do gerenciador\n");
       verificaFilaDeAltaPrioridade();
       if (!isFilaVazia(filaDeProcessosProntos)){
         printf("FILA DE PRONTOS NAO ESTA VAZIA\n");
       }
-      puts("Sucesso sucesso na verificao da fila de alta prioridade\n");
+      puts("sucesso na verificao da fila de alta prioridade\n");
       verificarVoltaDeIO();
       puts("Sucesso na verificarVoltaDeIO\n");
       if (isRodadaOciosa()){
         tempoDoGerenciador++;
+        printf("Rodada Ociosa\n");
         continue;
       }
       puts("Sucesso no isRodadaOciosa\n");

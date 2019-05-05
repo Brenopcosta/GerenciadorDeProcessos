@@ -17,7 +17,9 @@ void verificaFilaDeAltaPrioridade() {
     }
     else{
       if (!isFilaVazia(filaDeBaixaPrioridade)) {
+        for(i=0;i<tamanhoFila(filaDeBaixaPrioridade);i++){
         insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeBaixaPrioridade)]);
+        }
       }
     }
 }

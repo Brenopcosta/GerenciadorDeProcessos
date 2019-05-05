@@ -11,12 +11,7 @@ void inicializaProcesso() {
   int i;
   for(i = 0; i < NUMERO_DE_PROCESSOS ;i++) {
     processo[i] = (Processo*) malloc(sizeof(Processo));
-    processo[i]->pid = (rand() % 10) + 1;
-    for(int j = 0; j<i; j++) {
-      if (processo[i]->pid == processo[j]->pid) {
-        processo[i]->pid = (rand() % 10) + 1;
-      }
-    }
+    processo[i]->pid = i;
     processo[i]->tempoDeExecucaoTotal = (rand() % 15) + 1;
     processo[i]->tempoDeExecucaoAtual = 0;
     processo[i]->tempoDePedidaDeIO = (rand() % 15) + 1;
