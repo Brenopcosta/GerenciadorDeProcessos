@@ -94,17 +94,13 @@ int removeProcessoDaFila(Fila* fila){
     int pid;
     if (fila == NULL || fila->inicio == NULL)
       return 20;
-    puts("fila nao esta vazia");
 
     Elemento *elementoAuxiliar = (Elemento *) malloc(sizeof(Elemento));
               elementoAuxiliar= fila->inicio;
-    puts("populou elemento auxiliar\n");
 
     Processo *processoAuxiliar = (Processo *) malloc(sizeof(Processo));
     processoAuxiliar = elementoAuxiliar->processo;
-    puts("populou processos auxiliar\n");
     pid = processoAuxiliar->pid;
-    puts("populou o pid\n");
     fila->inicio = fila->inicio->proximoElementoDaFila;
     if (fila->inicio == NULL) {
         fila->final = NULL;

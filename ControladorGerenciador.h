@@ -8,18 +8,13 @@ bool isGerenciadorLigado = true;
 
 //Verifica se existe processos na fila de alta prioridade, caso sim adiciona estes processos na fila de prontos,
 // caso não Verificase há processos na fila de baixa prioridade e adiciona na fila de prontos
-void adicionaProcessosNaFilaDeProntos() {
-    int i;
+void verificaFilaDeAltaPrioridade() {
     if(!isFilaVazia(filaDeAltaPrioridade)){
-      for(i=0;i<tamanhoFila(filaDeAltaPrioridade);i++){
         insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeAltaPrioridade)]);
-      }
     }
     else{
       if (!isFilaVazia(filaDeBaixaPrioridade)) {
-        for(i=0;i<tamanhoFila(filaDeBaixaPrioridade);i++){
         insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeBaixaPrioridade)]);
-        }
       }
     }
 }
@@ -53,17 +48,16 @@ bool isRodadaOciosa(){
     }
 }
 
-bool executaProcesso(){
+void executaProcesso(){
     int pidDoProcesso;
     int i;
-    puts("removendo processo da fila ...");
+
     pidDoProcesso = removeProcessoDaFila(filaDeProcessosProntos);
-    puts("Sucesso na removeProcessoDaFila");
     if(pidDoProcesso == 20)
       printf("processo invalido\n");
 
     for (i = 0; i < TIME_SLICE; i++) {
-        if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO) {
+        if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO && (strcmp(processo[pidDoProcesso]->status,"parado") != 0) ) {
             printf(" Processo de pid :%d pediu I/O \n",processo[pidDoProcesso]->pid);
             strcpy(processo[pidDoProcesso]->status, "parado");
                switch (processo[pidDoProcesso]->tipoDeIO) {
@@ -78,23 +72,18 @@ bool executaProcesso(){
                         break;
                       default:
                         puts("Erro na pedida de IO");
-                        break;
                     }
             break;
         }
         else{
-        (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
           if (processo[pidDoProcesso]->tempoDeExecucaoTotal == processo[pidDoProcesso]->tempoDeExecucaoAtual) {
-            tempoDoGerenciador++;
             strcpy(processo[pidDoProcesso]->status, "terminado");
-            printf("Processo de pid :%d\n",processo[pidDoProcesso]->pid);
           }
           else{
           tempoDoGerenciador++;
-          printf("Rodada %d ........................................................\n",tempoDoGerenciador );
-          printf("Executando o processo de pid %d\n",processo[pidDoProcesso]->pid);
+          (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
+          printf("Executando o processo de pid %d no tempo %d u.t\n",processo[pidDoProcesso]->pid, processo[pidDoProcesso]->tempoDeExecucaoAtual);
           printf("Tempo de execucao do gerenciador: %d u.t \n\n",tempoDoGerenciador);
-          printf("Tempo de execucao do processo atual %d \n", processo[pidDoProcesso]->tempoDeExecucaoAtual);
         }
       }
     }
@@ -105,13 +94,13 @@ void verificarVoltaDeIO(){
       for(i=0;i<NUMERO_DE_PROCESSOS;i++){
         if(processo[i]->tempoDeVoltaDeIO >= tempoDoGerenciador){
           switch (processo[i]->tipoDeIO) {
-            case IO_IMPRESSORA:
+            case 1:
               insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
               break;
-            case IO_DISCO:
+            case 2:
               insereElementoNaFila(filaDeBaixaPrioridade, processo[i]);
               break;
-            case IO_FITA_MAGNETICA:
+            case 3:
               insereElementoNaFila(filaDeAltaPrioridade, processo[i]);
               break;
         }
