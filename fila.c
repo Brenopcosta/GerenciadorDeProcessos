@@ -89,12 +89,14 @@ bool insereElementoNaFila(Fila* fila, Processo* processo){
     return true;
 }
 
-Processo* removeProcessoDaFila(Fila* fila){
+//retorna PID do processo
+int removeProcessoDaFila(Fila* fila){
+    int pid;
     if (fila == NULL || fila->inicio == NULL)
-      return NULL;
+      return 20;
 
     Elemento *elementoAuxiliar = fila->inicio;
-    Processo* processoRetorno = elementoAuxiliar->processo;
+    pid = elementoAuxiliar->processo->pid;
 
     fila->inicio = fila->inicio->proximoElementoDaFila;
     if (fila->inicio == NULL) {
@@ -102,7 +104,7 @@ Processo* removeProcessoDaFila(Fila* fila){
     }
 
     free(elementoAuxiliar);
-    return processoRetorno;
+    return pid;
 }
 
 int tamanhoFila(Fila* fila){

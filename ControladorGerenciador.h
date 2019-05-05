@@ -6,17 +6,15 @@
 int tempoDoGerenciador = 0 ;
 bool isGerenciadorLigado = true;
 
-
-
 //Verifica se existe processos na fila de alta prioridade, caso sim adiciona estes processos na fila de prontos,
 // caso não Verificase há processos na fila de baixa prioridade e adiciona na fila de prontos
 void verificaFilaDeAltaPrioridade() {
     if(!isFilaVazia(filaDeAltaPrioridade)){
-        insereElementoNaFila(filaDeProcessosProntos, removeProcessoDaFila(filaDeAltaPrioridade));
+        insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeAltaPrioridade)]);
     }
     else{
       if (!isFilaVazia(filaDeBaixaPrioridade)) {
-        insereElementoNaFila(filaDeProcessosProntos, removeProcessoDaFila(filaDeBaixaPrioridade));
+        insereElementoNaFila(filaDeProcessosProntos, processo[removeProcessoDaFila(filaDeBaixaPrioridade)]);
       }
     }
 }
@@ -53,9 +51,10 @@ bool isRodadaOciosa(){
 void executaProcesso(){
     int pidDoProcesso;
     int i;
-    Processo *processoEmExecucao = malloc(sizeof(Processo));
-    processoEmExecucao = removeProcessoDaFila(filaDeProcessosProntos);
-    pidDoProcesso = removeProcessoDaFila(filaDeProcessosProntos)->pid;
+
+    pidDoProcesso = removeProcessoDaFila(filaDeProcessosProntos);
+    if(pidDoProcesso == 20)
+      printf("processo invalido\n");
 
     for (i = 0; i < TIME_SLICE; i++) {
         if (processo[pidDoProcesso]->tempoDeExecucaoAtual == processo[pidDoProcesso]->tempoDePedidaDeIO) {
@@ -74,20 +73,17 @@ void executaProcesso(){
                       default:
                         puts("Erro na pedida de IO");
                     }
-            free(processoEmExecucao);
             break;
         }
         else{
         (processo[pidDoProcesso]->tempoDeExecucaoAtual)++;
           if (processo[pidDoProcesso]->tempoDeExecucaoTotal == processo[pidDoProcesso]->tempoDeExecucaoAtual) {
             strcpy(processo[pidDoProcesso]->status, "terminado");
-            free(processoEmExecucao);
           }
           else{
           tempoDoGerenciador++;
           printf("Executando o processo de pid %d\n",processo[pidDoProcesso]->pid);
           printf("Tempo de execucao do gerenciador: %d u.t \n\n",tempoDoGerenciador);
-          free(processoEmExecucao);
         }
       }
     }

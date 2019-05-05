@@ -24,11 +24,12 @@ int main(){
     }
 
     printf("Teste de remoção na lista\n");
+    int pid;
     for ( i = 0; i < 5; i++) {
 
-      Processo *processo = removeProcessoDaFila(filaDeProcessosProntos);
+      pid = removeProcessoDaFila(filaDeProcessosProntos);
       tam = tamanhoFila(filaDeProcessosProntos);
-      printf("Foi removido processo %d \n", processo->pid );
+      printf("Foi removido processo %d \n", pid );
       printf(" T: %d \n", tam);
     }
 
