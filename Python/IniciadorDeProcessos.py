@@ -4,8 +4,9 @@ import random
 NUMERO_DE_PROCESSOS = 2
 processos = []
 
+
 def inicializaProcesso():
-    for i in range (0, NUMERO_DE_PROCESSOS):
+    for i in range(0, NUMERO_DE_PROCESSOS):
         tempoDeExecucaoTotal = random.randint(1,15)
         tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
         tempoDeVoltaDeIO = 500
