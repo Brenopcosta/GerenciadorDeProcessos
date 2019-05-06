@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ea7a6aa-f486-448c-8429-f48ffedb5428" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Python.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ControladorDoGerenciador.py" beforeDir="false" afterPath="$PROJECT_DIR$/ControladorDoGerenciador.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IniciadorDeProcessos.py" beforeDir="false" afterPath="$PROJECT_DIR$/IniciadorDeProcessos.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,12 +15,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1343">
-              <caret line="127" column="29" selection-start-line="127" selection-start-column="29" selection-end-line="127" selection-end-column="29" />
+            <state relative-caret-position="195">
+              <caret line="135" column="22" selection-start-line="135" selection-start-column="22" selection-end-line="135" selection-end-column="22" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
                 <element signature="e#500#861#0" />
-                <element signature="e#2477#2746#0" />
+                <element signature="e#2750#3327#0" />
                 <element signature="e#3356#3585#0" />
                 <element signature="e#3628#3963#0" />
               </folding>
@@ -172,12 +168,12 @@
       <updated>1557088323887</updated>
       <workItem from="1557088327977" duration="7992000" />
       <workItem from="1557097129529" duration="222000" />
-      <workItem from="1557097367512" duration="4000000" />
+      <workItem from="1557097367512" duration="6026000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12214000" />
+    <option name="totallyTimeSpent" value="14240000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -210,7 +206,7 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Python$main.coverage" NAME="main Coverage Results" MODIFIED="1557101341662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Python$main.coverage" NAME="main Coverage Results" MODIFIED="1557105104990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Fila.py" />
@@ -240,12 +236,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="127" column="29" selection-start-line="127" selection-start-column="29" selection-end-line="127" selection-end-column="29" />
+        <state relative-caret-position="195">
+          <caret line="135" column="22" selection-start-line="135" selection-start-column="22" selection-end-line="135" selection-end-column="22" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
             <element signature="e#500#861#0" />
-            <element signature="e#2477#2746#0" />
+            <element signature="e#2750#3327#0" />
             <element signature="e#3356#3585#0" />
             <element signature="e#3628#3963#0" />
           </folding>

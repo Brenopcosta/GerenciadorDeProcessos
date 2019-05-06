@@ -38,12 +38,16 @@ def inicializaProcesso():
 
 def executaProcesso():
     global tempoDoGerenciador
+    if not filaDeProcessosProntos:
+        tempoDoGerenciador = tempoDoGerenciador + 1
+        return
     processo = filaDeProcessosProntos.pop(0)
 
     for i in range(0, TIME_SLICE):
         if processo.tempoDeExecucaoAtual == processo.tempoDePedidaDeIO and\
                 processo.status != "Parado" and processo.status != "Terminado":
             print("Processo de PID " + str(processo.pid) + " pediu I/O")
+            processo.tempoDePedidaDeIO = 0
             processo.status = "Parado"
             filaDeProcessosParados.append(processo)
             if processo.tipoDeIO == 1:
@@ -54,10 +58,12 @@ def executaProcesso():
                 processo.tempoDeVoltaDeIO = tempoDoGerenciador + VOLTA_IO_FITA
             print("O processo vai voltar no tempo:" + str(processo.tempoDeVoltaDeIO))
             tempoDoGerenciador = tempoDoGerenciador + 1
+            return
         else:
             if processo.tempoDeExecucaoTotal == processo.tempoDeExecucaoAtual:
                 processo.status = "Terminado"
                 tempoDoGerenciador = tempoDoGerenciador + 1
+                return
             elif processo.status != "Parado":
                 tempoDoGerenciador = tempoDoGerenciador + 1
                 processo.tempoDeExecucaoAtual = processo.tempoDeExecucaoAtual + 1
@@ -65,28 +71,36 @@ def executaProcesso():
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
             else:
                 tempoDoGerenciador = tempoDoGerenciador + 1
+    filaDeBaixaPrioridade.append(processo)
     return
 
 
 def verificarFilaDeAltaPrioridade():
     if filaDeAltaPrioridade:
+        filaDeAltaPrioridade[0].status = "Pronto"
         filaDeProcessosProntos.append(filaDeAltaPrioridade.pop(0))
     elif filaDeBaixaPrioridade:
+        filaDeBaixaPrioridade[0].status = "Pronto"
         filaDeProcessosProntos.append(filaDeBaixaPrioridade.pop(0))
     return
 
 
 def verificarVoltaDeIO():
     for i in range(0, NUMERO_DE_PROCESSOS):
-        if processos[i].tempoDeVoltaDeIO >= tempoDoGerenciador:
+        if processos[i].tempoDeVoltaDeIO <= tempoDoGerenciador and processos[i].tempoDeVoltaDeIO != 0:
+            processos[i].tempoDeVoltaDeIO = 0
+            print("Processo " + str(processos[i].pid) + " vai voltar do I/O")
             if processos[i].tipoDeIO == 1:
                 if processos[i] not in filaDeAltaPrioridade:
+                    print("Entrou na fila de alta")
                     filaDeAltaPrioridade.append(processos[i])
             elif processos[i].tipoDeIO == 2:
                 if processos[i] not in filaDeBaixaPrioridade:
+                    print("Entrou na fila de baixa")
                     filaDeBaixaPrioridade.append(processos[i])
             elif processos[i].tipoDeIO == 3:
                 if processos[i] not in filaDeAltaPrioridade:
+                    print("Entrou na fila de alta")
                     filaDeAltaPrioridade.append((processos[i]))
     return
 
@@ -118,6 +132,7 @@ def main():
             if not filaDeProcessosProntos and not filaDeBaixaPrioridade and not filaDeAltaPrioridade and isTodosOsProcessosTerminados():
                 print("Gerenciador terminou com tempo de executao total de: " + str(tempoDoGerenciador) + " u.t.")
                 GerenciadorAtivo = False
+                return
             print("Rodada " + str(numeroRodada) + " .................................")
             verificarFilaDeAltaPrioridade()
             verificarVoltaDeIO()
@@ -126,6 +141,7 @@ def main():
                 numeroRodada = numeroRodada + 1
                 tempoDoGerenciador = tempoDoGerenciador + 1
             executaProcesso()
+            print("Tempo do gerenciador:" + str(tempoDoGerenciador))
             numeroRodada = numeroRodada + 1
         return
 
