@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 import random
+import sys
+
 
 @dataclass
 class Processo:
@@ -11,6 +13,7 @@ class Processo:
     tipoDeIO: int
     status: str
 
+
 VOLTA_IO_IMPRESSORA = 5
 VOLTA_IO_DISCO = 2
 VOLTA_IO_FITA = 6
@@ -20,16 +23,16 @@ filaDeBaixaPrioridade = []
 filaDeProcessosProntos = []
 filaDeProcessosParados = []
 GerenciadorAtivo = True
-NUMERO_DE_PROCESSOS = 2
+NUMERO_DE_PROCESSOS = 5
 processos = []
 tempoDoGerenciador = 0
 
 
 def inicializaProcesso():
     for i in range(0, NUMERO_DE_PROCESSOS):
-        tempoDeExecucaoTotal = random.randint(1,15)
+        tempoDeExecucaoTotal = random.randint(1, 15)
         tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
-        tempoDeVoltaDeIO = 500
+        tempoDeVoltaDeIO = -1
         tipoDeIO = random.randint(1, 3)
         processos.append(Processo(i, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
         print(processos[i])
@@ -44,8 +47,9 @@ def executaProcesso():
     processo = filaDeProcessosProntos.pop(0)
 
     for i in range(0, TIME_SLICE):
-        if processo.tempoDeExecucaoAtual == processo.tempoDePedidaDeIO and\
+        if processo.tempoDeExecucaoAtual == processo.tempoDePedidaDeIO and \
                 processo.status != "Parado" and processo.status != "Terminado":
+            print("---------------------------------------------")
             print("Processo de PID " + str(processo.pid) + " pediu I/O")
             processo.tempoDePedidaDeIO = 0
             processo.status = "Parado"
@@ -61,16 +65,19 @@ def executaProcesso():
             return
         else:
             if processo.tempoDeExecucaoTotal == processo.tempoDeExecucaoAtual:
+                print("---------------------------------------------")
                 processo.status = "Terminado"
                 tempoDoGerenciador = tempoDoGerenciador + 1
+                print("O processo de pid: " + str(processo.pid) + " terminou com tempo de turnaound " + str(
+                    tempoDoGerenciador))
                 return
             elif processo.status != "Parado":
+                print("---------------------------------------------")
                 tempoDoGerenciador = tempoDoGerenciador + 1
                 processo.tempoDeExecucaoAtual = processo.tempoDeExecucaoAtual + 1
-                print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(processo.tempoDeExecucaoAtual))
+                print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
+                    processo.tempoDeExecucaoAtual))
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
-            else:
-                tempoDoGerenciador = tempoDoGerenciador + 1
     filaDeBaixaPrioridade.append(processo)
     return
 
@@ -87,20 +94,20 @@ def verificarFilaDeAltaPrioridade():
 
 def verificarVoltaDeIO():
     for i in range(0, NUMERO_DE_PROCESSOS):
-        if processos[i].tempoDeVoltaDeIO <= tempoDoGerenciador and processos[i].tempoDeVoltaDeIO != 0:
+        if processos[i].tempoDeVoltaDeIO <= tempoDoGerenciador and processos[i].tempoDeVoltaDeIO != 0 and processos[i].status == "Parado":
+            print("Processo " + str(processos[i].pid) + " voltou do I/O no tempo :" +str(processos[i].tempoDeVoltaDeIO)+" u.t")
             processos[i].tempoDeVoltaDeIO = 0
-            print("Processo " + str(processos[i].pid) + " vai voltar do I/O")
             if processos[i].tipoDeIO == 1:
                 if processos[i] not in filaDeAltaPrioridade:
-                    print("Entrou na fila de alta")
+                    print("Entrou na fila de alta prioridade")
                     filaDeAltaPrioridade.append(processos[i])
             elif processos[i].tipoDeIO == 2:
                 if processos[i] not in filaDeBaixaPrioridade:
-                    print("Entrou na fila de baixa")
+                    print("Entrou na fila de baixa prioridade")
                     filaDeBaixaPrioridade.append(processos[i])
             elif processos[i].tipoDeIO == 3:
                 if processos[i] not in filaDeAltaPrioridade:
-                    print("Entrou na fila de alta")
+                    print("Entrou na fila de alta prioridade")
                     filaDeAltaPrioridade.append((processos[i]))
     return
 
@@ -123,27 +130,20 @@ def isTodosOsProcessosTerminados():
 
 
 def main():
-        inicializaProcesso()
-        numeroRodada = 0
-        global tempoDoGerenciador, GerenciadorAtivo
-        for i in range(0, 2):
-            filaDeAltaPrioridade.append(processos[i])
-        while GerenciadorAtivo:
-            if not filaDeProcessosProntos and not filaDeBaixaPrioridade and not filaDeAltaPrioridade and isTodosOsProcessosTerminados():
-                print("Gerenciador terminou com tempo de executao total de: " + str(tempoDoGerenciador) + " u.t.")
-                GerenciadorAtivo = False
-                return
-            print("Rodada " + str(numeroRodada) + " .................................")
-            verificarFilaDeAltaPrioridade()
-            verificarVoltaDeIO()
-            if isRodadaOciosa():
-                print("Rodada ociosa")
-                numeroRodada = numeroRodada + 1
-                tempoDoGerenciador = tempoDoGerenciador + 1
-            executaProcesso()
-            print("Tempo do gerenciador:" + str(tempoDoGerenciador))
-            numeroRodada = numeroRodada + 1
-        return
+    inicializaProcesso()
+    global tempoDoGerenciador, GerenciadorAtivo
+    for i in range(0, NUMERO_DE_PROCESSOS):
+        filaDeAltaPrioridade.append(processos[i])
+    while GerenciadorAtivo:
+        if not filaDeProcessosProntos and not filaDeBaixaPrioridade and not filaDeAltaPrioridade and isTodosOsProcessosTerminados():
+            print("Gerenciador terminou com tempo de executao total de: " + str(tempoDoGerenciador) + " u.t.")
+            GerenciadorAtivo = False
+            return
+        verificarFilaDeAltaPrioridade()
+        verificarVoltaDeIO()
+        executaProcesso()
+        print("Tempo do gerenciador:" + str(tempoDoGerenciador))
+    return
 
 
 main()
