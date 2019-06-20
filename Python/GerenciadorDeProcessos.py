@@ -6,6 +6,7 @@ import sys
 @dataclass
 class Processo:
     pid: int
+    tempoDeChegada: int
     tempoDeExecucaoTotal: int
     tempoDeExecucaoAtual: int
     tempoDePedidaDeIO: int
@@ -14,6 +15,7 @@ class Processo:
     status: str
 
 
+CONTADOR_PIDS = 0
 VOLTA_IO_IMPRESSORA = 5
 VOLTA_IO_DISCO = 2
 VOLTA_IO_FITA = 6
@@ -23,19 +25,31 @@ filaDeBaixaPrioridade = []
 filaDeProcessosProntos = []
 filaDeProcessosParados = []
 GerenciadorAtivo = True
-NUMERO_DE_PROCESSOS = 5
+NUMERO_DE_PROCESSOS = 4
 processos = []
 tempoDoGerenciador = 0
+
+def monitorDeCriacaoDeProcessos():
+    if len(processos) < NUMERO_DE_PROCESSOS and tempoDoGerenciador%4 == 0:
+        criaProcesso()
+
+def criaProcesso():
+    global CONTADOR_PIDS
+    tempoDeExecucaoTotal = random.randint(1, 15)
+    tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
+    tempoDeVoltaDeIO = -1
+    tipoDeIO = random.randint(1, 3)
+    processos.append(Processo(CONTADOR_PIDS,tempoDoGerenciador, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
+    filaDeProcessosProntos.append(processos[CONTADOR_PIDS])
+    print("Novo processo criado no tempo "+ str(tempoDoGerenciador)+ " e com PID:"+str(CONTADOR_PIDS))
+    print("Processo adicionado na fila de prontos")
+    print(processos[CONTADOR_PIDS])
+    CONTADOR_PIDS += 1
 
 
 def inicializaProcesso():
     for i in range(0, NUMERO_DE_PROCESSOS):
-        tempoDeExecucaoTotal = random.randint(1, 15)
-        tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
-        tempoDeVoltaDeIO = -1
-        tipoDeIO = random.randint(1, 3)
-        processos.append(Processo(i, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
-        print(processos[i])
+        criaProcesso()
     return
 
 
@@ -69,7 +83,7 @@ def executaProcesso():
                 processo.status = "Terminado"
                 tempoDoGerenciador = tempoDoGerenciador + 1
                 print("O processo de pid: " + str(processo.pid) + " terminou com tempo de turnaound " + str(
-                    tempoDoGerenciador))
+                    tempoDoGerenciador - processo.tempoDeChegada))
                 return
             elif processo.status != "Parado":
                 print("---------------------------------------------")
@@ -93,7 +107,7 @@ def verificarFilaDeAltaPrioridade():
 
 
 def verificarVoltaDeIO():
-    for i in range(0, NUMERO_DE_PROCESSOS):
+    for i in range(0, len(processos)):
         if processos[i].tempoDeVoltaDeIO <= tempoDoGerenciador and processos[i].tempoDeVoltaDeIO != 0 and processos[i].status == "Parado":
             print("Processo " + str(processos[i].pid) + " voltou do I/O no tempo :" +str(processos[i].tempoDeVoltaDeIO)+" u.t")
             processos[i].tempoDeVoltaDeIO = 0
@@ -121,7 +135,7 @@ def isRodadaOciosa():
 
 def isTodosOsProcessosTerminados():
     numeroDeProcessosTerminados = 0
-    for i in range(0, NUMERO_DE_PROCESSOS):
+    for i in range(0, len(processos)):
         if processos[i].status == "Terminado":
             numeroDeProcessosTerminados = numeroDeProcessosTerminados + 1
     if numeroDeProcessosTerminados == NUMERO_DE_PROCESSOS:
@@ -130,11 +144,9 @@ def isTodosOsProcessosTerminados():
 
 
 def main():
-    inicializaProcesso()
-    global tempoDoGerenciador, GerenciadorAtivo
-    for i in range(0, NUMERO_DE_PROCESSOS):
-        filaDeAltaPrioridade.append(processos[i])
+    global tempoDoGerenciador, GerenciadorAtivo , CONTADOR_PIDS
     while GerenciadorAtivo:
+        monitorDeCriacaoDeProcessos()
         if not filaDeProcessosProntos and not filaDeBaixaPrioridade and not filaDeAltaPrioridade and isTodosOsProcessosTerminados():
             print("Gerenciador terminou com tempo de executao total de: " + str(tempoDoGerenciador) + " u.t.")
             GerenciadorAtivo = False
