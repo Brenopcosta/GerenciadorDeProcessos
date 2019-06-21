@@ -30,7 +30,7 @@ processos = []
 tempoDoGerenciador = 0
 
 def monitorDeCriacaoDeProcessos():
-    if len(processos) < NUMERO_DE_PROCESSOS and tempoDoGerenciador%4 == 0:
+    if len(processos) < NUMERO_DE_PROCESSOS and tempoDoGerenciador%3 == 0:
         criaProcesso()
 
 def criaProcesso():
