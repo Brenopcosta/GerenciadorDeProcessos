@@ -1,7 +1,13 @@
 from dataclasses import dataclass
 import random
 import sys
+from typing import List
+from pip._vendor.html5lib._utils import memoize
 
+@dataclass
+class Pagina:
+    idPagina: int
+    idProcesso: int
 
 @dataclass
 class Processo:
@@ -13,8 +19,9 @@ class Processo:
     tempoDeVoltaDeIO: int
     tipoDeIO: int
     status: str
+    listaDePaginas: List[Pagina]
 
-
+CONTADOR_PAGINAS = 0
 CONTADOR_PIDS = 0
 VOLTA_IO_IMPRESSORA = 5
 VOLTA_IO_DISCO = 2
@@ -33,24 +40,28 @@ def monitorDeCriacaoDeProcessos():
     if len(processos) < NUMERO_DE_PROCESSOS and tempoDoGerenciador%3 == 0:
         criaProcesso()
 
+#função retorna uma lista de páginas
+def criaPaginasParaProcesso(idDoProcesso):
+    global CONTADOR_PAGINAS
+    paginas =[]
+    for i in range (1,random.randint(1,64)):
+        paginas.append(Pagina(CONTADOR_PAGINAS,idDoProcesso))
+        CONTADOR_PAGINAS += 1
+    return paginas
+
 def criaProcesso():
     global CONTADOR_PIDS
     tempoDeExecucaoTotal = random.randint(1, 15)
     tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
     tempoDeVoltaDeIO = -1
     tipoDeIO = random.randint(1, 3)
-    processos.append(Processo(CONTADOR_PIDS,tempoDoGerenciador, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto"))
+    processos.append(Processo(CONTADOR_PIDS,tempoDoGerenciador, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto",criaPaginasParaProcesso(CONTADOR_PIDS)))
     filaDeProcessosProntos.append(processos[CONTADOR_PIDS])
     print("Novo processo criado no tempo "+ str(tempoDoGerenciador)+ " e com PID:"+str(CONTADOR_PIDS))
+    print("processo criou as paginas:")
     print("Processo adicionado na fila de prontos")
     print(processos[CONTADOR_PIDS])
     CONTADOR_PIDS += 1
-
-
-def inicializaProcesso():
-    for i in range(0, NUMERO_DE_PROCESSOS):
-        criaProcesso()
-    return
 
 
 def executaProcesso():
