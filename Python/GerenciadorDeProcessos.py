@@ -1,7 +1,7 @@
+from typing import List
 from dataclasses import dataclass
 import random
 import sys
-from typing import List
 from pip._vendor.html5lib._utils import memoize
 
 @dataclass
@@ -35,6 +35,8 @@ GerenciadorAtivo = True
 NUMERO_DE_PROCESSOS = 4
 processos = []
 tempoDoGerenciador = 0
+memoriaPrincipal = []
+
 
 def monitorDeCriacaoDeProcessos():
     if len(processos) < NUMERO_DE_PROCESSOS and tempoDoGerenciador%3 == 0:
@@ -63,6 +65,10 @@ def criaProcesso():
     print(processos[CONTADOR_PIDS])
     CONTADOR_PIDS += 1
 
+def chamaPagina(processo):
+    listaDePaginaLocal = []
+    listaDePaginaLocal= processo.listaDePaginas
+    print("Processo que pagina"+ str(listaDePaginaLocal[0]))
 
 def executaProcesso():
     global tempoDoGerenciador
@@ -70,7 +76,6 @@ def executaProcesso():
         tempoDoGerenciador = tempoDoGerenciador + 1
         return
     processo = filaDeProcessosProntos.pop(0)
-
     for i in range(0, TIME_SLICE):
         if processo.tempoDeExecucaoAtual == processo.tempoDePedidaDeIO and \
                 processo.status != "Parado" and processo.status != "Terminado":
@@ -99,6 +104,7 @@ def executaProcesso():
             elif processo.status != "Parado":
                 print("---------------------------------------------")
                 tempoDoGerenciador = tempoDoGerenciador + 1
+                chamaPagina(processo)
                 processo.tempoDeExecucaoAtual = processo.tempoDeExecucaoAtual + 1
                 print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
                     processo.tempoDeExecucaoAtual))
