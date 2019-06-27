@@ -46,7 +46,7 @@ def monitorDeCriacaoDeProcessos():
 def criaPaginasParaProcesso(idDoProcesso):
     global CONTADOR_PAGINAS
     paginas =[]
-    for i in range (1,random.randint(1,64)):
+    for i in range (1,random.randint(2,64)):
         paginas.append(Pagina(CONTADOR_PAGINAS,idDoProcesso))
         CONTADOR_PAGINAS += 1
     return paginas
@@ -68,7 +68,27 @@ def criaProcesso():
 def chamaPagina(processo):
     listaDePaginaLocal = []
     listaDePaginaLocal= processo.listaDePaginas
-    print("Processo que pagina"+ str(listaDePaginaLocal[0]))
+    paginaLocal = listaDePaginaLocal[random.randint(0,len(listaDePaginaLocal)-1)]
+    print("Processo precisa da pagina "+ str(paginaLocal.idPagina))
+    return paginaLocal.idPagina
+
+def inserePaginaNaMemoriaPrincipal(pagina):
+    if len(memoriaPrincipal) >= 64:
+        print("Memoria Principal cheia ...")
+        print("Removendo a " +str(memoriaPrincipal[len(memoriaPrincipal)-1]))
+        memoriaPrincipal.pop(len(memoriaPrincipal)-1)
+        memoriaPrincipal.insert(0, pagina)
+    else:
+        memoriaPrincipal.insert(0, pagina)
+
+def buscaPagina(processo , idDaPagina):
+    pagina = Pagina(idDaPagina, processo.pid)
+    if pagina in memoriaPrincipal:
+        memoriaPrincipal.remove(pagina)
+        memoriaPrincipal.insert(0,pagina)
+    else:
+        print("PAGE FAULT!!!")
+        inserePaginaNaMemoriaPrincipal(pagina)
 
 def executaProcesso():
     global tempoDoGerenciador
@@ -104,10 +124,12 @@ def executaProcesso():
             elif processo.status != "Parado":
                 print("---------------------------------------------")
                 tempoDoGerenciador = tempoDoGerenciador + 1
-                chamaPagina(processo)
                 processo.tempoDeExecucaoAtual = processo.tempoDeExecucaoAtual + 1
                 print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
                     processo.tempoDeExecucaoAtual))
+                buscaPagina(processo,chamaPagina(processo))
+                print(memoriaPrincipal)
+                print(str(len(memoriaPrincipal)))
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
     filaDeBaixaPrioridade.append(processo)
     return
