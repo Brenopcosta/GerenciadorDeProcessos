@@ -20,6 +20,7 @@ class Processo:
     tipoDeIO: int
     status: str
     listaDePaginas: List[Pagina]
+    workingSet: List[Pagina]
 
 CONTADOR_PAGINAS = 0
 CONTADOR_PIDS = 0
@@ -32,7 +33,7 @@ filaDeBaixaPrioridade = []
 filaDeProcessosProntos = []
 filaDeProcessosParados = []
 GerenciadorAtivo = True
-NUMERO_DE_PROCESSOS = 4
+NUMERO_DE_PROCESSOS = 25
 processos = []
 tempoDoGerenciador = 0
 memoriaPrincipal = []
@@ -57,13 +58,72 @@ def criaProcesso():
     tempoDePedidaDeIO = random.randint(1, tempoDeExecucaoTotal)
     tempoDeVoltaDeIO = -1
     tipoDeIO = random.randint(1, 3)
-    processos.append(Processo(CONTADOR_PIDS,tempoDoGerenciador, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto",criaPaginasParaProcesso(CONTADOR_PIDS)))
+    processos.append(Processo(CONTADOR_PIDS,tempoDoGerenciador, tempoDeExecucaoTotal, 0, tempoDePedidaDeIO, tempoDeVoltaDeIO, tipoDeIO, "Pronto",criaPaginasParaProcesso(CONTADOR_PIDS),[]))
     filaDeProcessosProntos.append(processos[CONTADOR_PIDS])
     print("Novo processo criado no tempo "+ str(tempoDoGerenciador)+ " e com PID:"+str(CONTADOR_PIDS))
     print("processo criou as paginas:")
     print("Processo adicionado na fila de prontos")
     print(processos[CONTADOR_PIDS])
     CONTADOR_PIDS += 1
+
+#------------------------------------------------------------------
+def isProcessoComWorkingSetNaMemoria(idProcessoDado):
+    for i in range(0,len(memoriaPrincipal)-1):
+        if memoriaPrincipal[i] == idProcessoDado:
+            return True
+    return False
+
+def moveWorkingSetParaFrenteDaMemoriaPrincipal(idProcesso):
+    for i in range(len(memoriaPrincipal)-1 , -1, -1):
+        if memoriaPrincipal[i].idProceso == idProcesso:
+            memoriaPrincipal.insert(0,memoriaPrincipal.pop(i))
+
+
+
+
+def liberaEspacoNaMemoriaPrincipal():
+    print("Liberando Espaco na memoria")
+    while len(memoriaPrincipal) > 60:
+        workingSetLocal = []
+        idProcessoASerRemovido = memoriaPrincipal[len(memoriaPrincipal)-1].idProcesso
+        for i in range(len(memoriaPrincipal)-1, -1 , -1):
+            if memoriaPrincipal[i].idProcesso == idProcessoASerRemovido:
+                workingSetLocal.insert(0,memoriaPrincipal.pop(i))
+
+        processos[idProcessoASerRemovido].workingSet = workingSetLocal
+
+
+def preparaProcessoParaExecução(processo):
+    print("Preparando processo de pid : "+ str(processo.pid)+ " para ser executado.")
+    if isProcessoComWorkingSetNaMemoria(processo.pid):
+        moveWorkingSetParaFrenteDaMemoriaPrincipal(processo.pid)
+    else:
+        if len(processo.workingSet):
+            if len(memoriaPrincipal) >= 60:
+                liberaEspacoNaMemoriaPrincipal()
+            memoriaPrincipal.insert(0, processo.workingSet)
+
+def temEspacoNoWorkingSet(idProcesso):
+    contadorDePaginasNoWorkingSet = 0
+    for i in range(0, len(memoriaPrincipal)-1):
+        processo = memoriaPrincipal[i]
+        if processo.idProcesso == idProcesso:
+            contadorDePaginasNoWorkingSet +=1
+    if contadorDePaginasNoWorkingSet < 4:
+        return True
+    elif contadorDePaginasNoWorkingSet == 4:
+        return False
+    else:
+        print("WorkingSet defeituoso")
+        return False
+
+def removePaginaDoWorkingSet(idProcesso):
+    workingSetLocal = []
+    for i in range (0,len(memoriaPrincipal)-1):
+        if memoriaPrincipal[i].idProcesso == idProcesso:
+            workingSetLocal.append(memoriaPrincipal[i])
+    print("Removendo a pagina "+ str(workingSetLocal[len(workingSetLocal)-1]))
+    memoriaPrincipal.remove(workingSetLocal[len(workingSetLocal)-1])
 
 def chamaPagina(processo):
     listaDePaginaLocal = []
@@ -73,13 +133,10 @@ def chamaPagina(processo):
     return paginaLocal.idPagina
 
 def inserePaginaNaMemoriaPrincipal(pagina):
-    if len(memoriaPrincipal) >= 64:
-        print("Memoria Principal cheia ...")
-        print("Removendo a " +str(memoriaPrincipal[len(memoriaPrincipal)-1]))
-        memoriaPrincipal.pop(len(memoriaPrincipal)-1)
-        memoriaPrincipal.insert(0, pagina)
-    else:
-        memoriaPrincipal.insert(0, pagina)
+    if temEspacoNoWorkingSet(pagina.idProcesso) == False:
+        print("O Processo "+ str(pagina.idProcesso)+" excedeu o limite de paginas na simultaneas na memoria")
+        removePaginaDoWorkingSet(pagina.idProcesso)
+    memoriaPrincipal.insert(0, pagina)
 
 def buscaPagina(processo , idDaPagina):
     pagina = Pagina(idDaPagina, processo.pid)
@@ -89,6 +146,8 @@ def buscaPagina(processo , idDaPagina):
     else:
         print("PAGE FAULT!!!")
         inserePaginaNaMemoriaPrincipal(pagina)
+
+#-----------------------------------------------------------------------------------------------
 
 def executaProcesso():
     global tempoDoGerenciador
@@ -125,6 +184,7 @@ def executaProcesso():
                 print("---------------------------------------------")
                 tempoDoGerenciador = tempoDoGerenciador + 1
                 processo.tempoDeExecucaoAtual = processo.tempoDeExecucaoAtual + 1
+                preparaProcessoParaExecução(processo)
                 print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
                     processo.tempoDeExecucaoAtual))
                 buscaPagina(processo,chamaPagina(processo))
