@@ -204,7 +204,7 @@ def executaProcesso():
                 print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
                     processo.tempoDeExecucaoAtual))
                 buscaPagina(processo, chamaPagina(processo))
-                print(memoriaPrincipal)
+                print("Situação atual da memória principal: " + str(memoriaPrincipal))
                 print("Espaço usado na memoria principal: " + str(len(memoriaPrincipal)))
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
     filaDeBaixaPrioridade.append(processo)
