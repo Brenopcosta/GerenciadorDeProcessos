@@ -132,7 +132,7 @@ def removePaginaDoWorkingSet(idProcesso):
     for i in range(0, len(memoriaPrincipal) - 1):
         if memoriaPrincipal[i].idProcesso == idProcesso:
             workingSetLocal.append(memoriaPrincipal[i])
-    print("Removendo a " + str(workingSetLocal[len(workingSetLocal) - 1]))
+    print("Removendo a página " + str(workingSetLocal[len(workingSetLocal) - 1].idPagina) + " do processo " + str(workingSetLocal[len(workingSetLocal) - 1].idProcesso))
     memoriaPrincipal.remove(workingSetLocal[len(workingSetLocal) - 1])
 
 
@@ -204,7 +204,11 @@ def executaProcesso():
                 print("Executando o processo de PID " + str(processo.pid) + " no tempo " + str(
                     processo.tempoDeExecucaoAtual))
                 buscaPagina(processo, chamaPagina(processo))
-                print("Situação atual da memória principal: " + str(memoriaPrincipal))
+                print("Situação atual da memória principal:")
+                index = 0
+                for pagina in memoriaPrincipal:
+                    print(str(index) + " | Página " + str(pagina.idPagina) + " do processo " + str(pagina.idProcesso))
+                    index += 1
                 print("Espaço usado na memoria principal: " + str(len(memoriaPrincipal)))
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
     filaDeBaixaPrioridade.append(processo)
