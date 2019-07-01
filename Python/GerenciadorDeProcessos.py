@@ -102,7 +102,7 @@ def liberaEspacoNaMemoriaPrincipal():
 
 
 def preparaProcessoParaExecução(processo):
-    print("Preparando processo de pid : " + str(processo.pid) + " para ser executado.")
+    print("Preparando processo de PID " + str(processo.pid) + " para ser executado")
     if isProcessoComWorkingSetNaMemoria(processo.pid):
         moveWorkingSetParaFrenteDaMemoriaPrincipal(processo)
     else:
@@ -132,7 +132,7 @@ def removePaginaDoWorkingSet(idProcesso):
     for i in range(0, len(memoriaPrincipal) - 1):
         if memoriaPrincipal[i].idProcesso == idProcesso:
             workingSetLocal.append(memoriaPrincipal[i])
-    print("Removendo a pagina " + str(workingSetLocal[len(workingSetLocal) - 1]))
+    print("Removendo a " + str(workingSetLocal[len(workingSetLocal) - 1]))
     memoriaPrincipal.remove(workingSetLocal[len(workingSetLocal) - 1])
 
 
@@ -205,7 +205,7 @@ def executaProcesso():
                     processo.tempoDeExecucaoAtual))
                 buscaPagina(processo, chamaPagina(processo))
                 print(memoriaPrincipal)
-                print(str(len(memoriaPrincipal)))
+                print("Espaço usado na memoria principal: " + str(len(memoriaPrincipal)))
                 print("Tempo de execucao do gerenciador: " + str(tempoDoGerenciador) + " u.t.")
     filaDeBaixaPrioridade.append(processo)
     return
@@ -225,7 +225,7 @@ def verificarVoltaDeIO():
     for i in range(0, len(processos)):
         if processos[i].tempoDeVoltaDeIO <= tempoDoGerenciador and processos[i].tempoDeVoltaDeIO != 0 \
                 and processos[i].status == "Parado":
-            print("Processo " + str(processos[i].pid) + " voltou do I/O no tempo :" + str(
+            print("Processo " + str(processos[i].pid) + " voltou do I/O no tempo: " + str(
                 processos[i].tempoDeVoltaDeIO) + " u.t")
             processos[i].tempoDeVoltaDeIO = 0
             if processos[i].tipoDeIO == 1:
@@ -271,7 +271,7 @@ def main():
         verificarFilaDeAltaPrioridade()
         verificarVoltaDeIO()
         executaProcesso()
-        print("Tempo do gerenciador:" + str(tempoDoGerenciador))
+        print("Tempo do gerenciador: " + str(tempoDoGerenciador))
     return
 
 
