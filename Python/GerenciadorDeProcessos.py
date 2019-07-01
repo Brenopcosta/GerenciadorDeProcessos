@@ -34,7 +34,7 @@ filaDeBaixaPrioridade = []
 filaDeProcessosProntos = []
 filaDeProcessosParados = []
 GerenciadorAtivo = True
-NUMERO_DE_PROCESSOS = 5
+NUMERO_DE_PROCESSOS = 17
 processos = []
 tempoDoGerenciador = 0
 memoriaPrincipal = []
@@ -83,9 +83,9 @@ def isProcessoComWorkingSetNaMemoria(idProcessoDado):
     return False
 
 
-def moveWorkingSetParaFrenteDaMemoriaPrincipal(idProcesso):
+def moveWorkingSetParaFrenteDaMemoriaPrincipal(processo):
     for i in range(len(memoriaPrincipal) - 1, -1, -1):
-        if memoriaPrincipal[i].idProceso == idProcesso:
+        if memoriaPrincipal[i] == processo:
             memoriaPrincipal.insert(0, memoriaPrincipal.pop(i))
 
 
@@ -104,7 +104,7 @@ def liberaEspacoNaMemoriaPrincipal():
 def preparaProcessoParaExecução(processo):
     print("Preparando processo de pid : " + str(processo.pid) + " para ser executado.")
     if isProcessoComWorkingSetNaMemoria(processo.pid):
-        moveWorkingSetParaFrenteDaMemoriaPrincipal(processo.pid)
+        moveWorkingSetParaFrenteDaMemoriaPrincipal(processo)
     else:
         if len(processo.workingSet):
             if len(memoriaPrincipal) >= 60:
@@ -147,6 +147,9 @@ def inserePaginaNaMemoriaPrincipal(pagina):
     if temEspacoNoWorkingSet(pagina.idProcesso) == False:
         print("O Processo " + str(pagina.idProcesso) + " excedeu o limite de paginas simultaneas na memoria")
         removePaginaDoWorkingSet(pagina.idProcesso)
+    elif len(memoriaPrincipal) >= 64:
+        print("MEMORIA CHEIA, LIBERANDO ESPACO ....")
+        liberaEspacoNaMemoriaPrincipal()
     memoriaPrincipal.insert(0, pagina)
 
 
