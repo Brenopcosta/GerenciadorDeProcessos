@@ -48,7 +48,9 @@ def main():
         print(str(i))
 
     vetor2 = [7,8,9]
-    vetor.insert(0,vetor2)
+    for i in range(len(vetor2)-1,-1,-1):
+        vetor.insert(0,vetor2[i])
+
     print(str(vetor))
     return 1
 
